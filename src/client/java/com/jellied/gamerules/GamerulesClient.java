@@ -32,8 +32,8 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
     public static void onWorldChanged(World world) {
         worldGamerules = ((WorldInfoAccessorClient) world.worldInfo).getGamerules();
 
-        System.out.print("Gamerules: ");
-        System.out.println(worldGamerules);
+        // System.out.print("Gamerules: ");
+        // System.out.println(worldGamerules);
 
         if (world.multiplayerWorld) {
             return;
@@ -66,7 +66,7 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
         }
 
         worldGamerules = newTag;
-        System.out.println("Gamerules packet received!");
+        // System.out.println("Gamerules packet received!");
     }
 
     public void onReceiveServerPacket(NetworkPlayer plr, byte[] data) {

@@ -14,7 +14,7 @@ public abstract class WorldInfoMixin implements WorldInfoAccessorClient {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     public void onWorldInfoConstructed(NBTTagCompound tag, CallbackInfo ci) {
-        System.out.println("New world info!");
+        // System.out.println("New world info!");
 
         if (tag.hasKey("jelliedgamerules")) {
             gamerulesTag = tag.getCompoundTag("jelliedgamerules");
