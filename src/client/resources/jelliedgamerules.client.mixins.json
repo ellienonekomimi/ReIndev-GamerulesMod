@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.jellied.gamerules.client.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "EntityPlayerMixin",
+    "MinecraftMixin",
+    "WorldMixin",
+    "ExplosionMixin",
+    "BlockTntMixin",
+    "WorldInfoMixin",
+    "EntityPlayerSPMixin"
+  ]
+}
