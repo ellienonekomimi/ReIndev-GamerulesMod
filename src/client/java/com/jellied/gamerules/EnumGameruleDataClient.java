@@ -1,0 +1,39 @@
+package com.jellied.gamerules;
+
+public enum EnumGameruleDataClient {
+    KEEP_INVENTORY("keepInventory", 0, "If true, players will not drop their inventory upon death.", "Accepts a value of either 0 (false) or 1 (true)"),
+    DO_DAYLIGHT_CYCLE("doDaylightCycle", 1, "If false, the current time will be frozen.", "Accepts a value of either 0 (false) or 1 (true)"),
+    MOB_GRIEFING("mobGriefing", 1, "If false, mobs such as creepers will not destroy blocks.", "Accepts a value of either 0 (false) or 1 (true)"),
+    TNT_EXPLODES("tntExplodes", 1, "If false, tnt will not explode when primed.", "Accepts a value of either 0 (false) or 1 (true)"),
+    DO_NIGHTMARES("doNightmares", 1, "If true, players sleeping in a dark environment can spawn a mob on them.", "Accepts a value of either 0 (false) or 1 (true)"),
+    ALLOW_SURVIVAL_SPRINTING("allowSurvivalSprinting", 0, "If true, players can sprint in survival.", "Accepts a value of either 0 (false) or 1 (true)"),
+    DO_FIRE_TICK("doFireTick", 1, "If false, fire will not spread.", "Accepts a value of either 0 (false) or 1 (true)"),
+    PLAYERS_SLEEPING_PERCENTAGE("playersSleepingPercentage", 100, "Dictates the percentage of players that must be asleep in order to skip to morning.", "Accepts values between 0-100 (percentage of players that must be sleeping to skip to night)");
+
+    private final String id;
+    private final int defaultValue;
+    private final String description;
+    private final String syntaxHelp;
+    EnumGameruleDataClient(String id, int defaultValue, String description, String syntaxHelp) {
+        this.id = id;
+        this.defaultValue = defaultValue;
+        this.description = description;
+        this.syntaxHelp = syntaxHelp;
+    }
+
+    public String getId() {
+        return this.id;
+    }
+
+    public int getDefaultValue() {
+        return this.defaultValue;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public String getSyntaxHelp() {
+        return syntaxHelp;
+    }
+}

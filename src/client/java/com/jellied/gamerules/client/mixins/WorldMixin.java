@@ -4,6 +4,7 @@ import com.jellied.gamerules.GamerulesClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.game.block.Block;
 import net.minecraft.src.game.block.BlockFire;
+import net.minecraft.src.game.entity.player.EntityPlayer;
 import net.minecraft.src.game.level.SpawnerAnimals;
 import net.minecraft.src.game.level.World;
 import net.minecraft.src.game.level.WorldInfo;
@@ -20,6 +21,8 @@ import java.util.Random;
 @Mixin(World.class)
 public class WorldMixin {
     @Shadow public boolean multiplayerWorld;
+
+    @Shadow public List<EntityPlayer> playerEntities;
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/level/WorldInfo;setWorldTime(J)V"))
     public void tick(WorldInfo worldInfo, long newWorldTime) {
@@ -62,5 +65,22 @@ public class WorldMixin {
         }
 
         block.updateTick(world, x, y, z, random);
+    }
+
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/level/World;isAllPlayersFullyAsleep()Z"))
+    public boolean checkPlayersAsleep(World world) {
+        if (world.multiplayerWorld) {
+            return false;
+        }
+
+        float totalPlayers = playerEntities.size();
+        float playersAsleep = 0;
+        for(int i = 0; i < playerEntities.size() - 1; i++) {
+            if (playerEntities.get(i).isPlayerFullyAsleep()) {
+                playersAsleep++;
+            }
+        }
+
+        return ((playersAsleep / totalPlayers) * 100) >= GamerulesClient.getGamerule("playersSleepingPercentage");
     }
 }

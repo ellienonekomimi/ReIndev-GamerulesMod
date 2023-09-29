@@ -1,5 +1,6 @@
 package com.jellied.gamerules.chatcommands;
 
+import com.fox2code.foxloader.network.ChatColors;
 import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.registry.CommandCompat;
 import com.jellied.gamerules.GamerulesClient;
@@ -13,27 +14,29 @@ public class GameruleChatCommandClient extends CommandCompat {
     }
 
     public String commandSyntax() {
-        return "gamerule <gamerule> <value>";
+        // Can't paste that weird ass symbol in intellij for some reason
+        return ChatColors.YELLOW + "/gamerule <gamerule name> <gamerule value>";
     }
 
     @Override
     public void onExecute(String[] args, NetworkPlayer user) {
         if (args.length == 1) {
-            user.displayChatMessage("<COMMAND FEEDBACK> Type /gamerule help for a list of gamerules.");
+            user.displayChatMessage(commandSyntax());
             return;
         }
         else if (args.length == 2) {
-            if (args[1].equals("help")) {
-                listGamerules(user);
+            if (GamerulesClient.getGamerule(args[1]) == null) {
+                user.displayChatMessage(ChatColors.RED + "<COMMAND FEEDBACK> Gamerule '" + args[1] + "' does not exist!");
+                return;
             }
-            else if (GamerulesClient.getGamerule(args[1]) != null) {
-                String desc = GamerulesClient.GAMERULE_DESCRIPTIONS.get(args[1]);
-                user.displayChatMessage("<COMMAND FEEDBACK> " + args[1] + ": " + desc);
-                user.displayChatMessage("<COMMAND FEEDBACK> Current value: " + GamerulesClient.getGamerule(args[1]));
-            }
-            else {
-                user.displayChatMessage("<COMMAND FEEDBACK> Gamerule '" + args[1] + "' does not exist!");
-            }
+
+            String gameruleName = args[1];
+
+            String desc = GamerulesClient.GAMERULE_DESCRIPTIONS.get(gameruleName);
+            String syntax = GamerulesClient.GAMERULE_SYNTAX.get(gameruleName);
+            user.displayChatMessage(ChatColors.GOLD + gameruleName + ": " + ChatColors.GRAY + desc);
+            user.displayChatMessage(ChatColors.GREEN + "Syntax: " + ChatColors.YELLOW + syntax);
+            user.displayChatMessage("Current value: " + ChatColors.AQUA + GamerulesClient.getGamerule(gameruleName));
 
             return;
         }
@@ -46,27 +49,18 @@ public class GameruleChatCommandClient extends CommandCompat {
             gameruleValue = Integer.valueOf(args[2]);
         }
         catch(Exception e) {
-            user.displayChatMessage("<COMMAND FEEDBACK> '" + args[2] + "' is not an integer!");
+            user.displayChatMessage(ChatColors.RED + "<COMMAND FEEDBACK> '" + args[2] + "' is not an integer!");
             return;
         }
 
         if (GamerulesClient.getGamerule(gameruleName) == null) {
-            user.displayChatMessage("<COMMAND FEEDBACK> '" + gameruleName + "' is not a valid gamerule!");
+            user.displayChatMessage(ChatColors.RED + "<COMMAND FEEDBACK> '" + gameruleName + "' is not a valid gamerule!");
             return;
         }
 
         GamerulesClient.setGamerule(gameruleName, gameruleValue);
-        user.displayChatMessage("<COMMAND FEEDBACK> Gamerule '" + gameruleName + "' set to " + gameruleValue);
+        user.displayChatMessage(ChatColors.GREEN + "<COMMAND FEEDBACK> Gamerule '" + gameruleName + "' set to " + ChatColors.AQUA + gameruleValue);
     }
 
-    public void listGamerules(NetworkPlayer plr) {
-        plr.displayChatMessage("<COMMAND FEEDBACK> Gamerules:");
 
-        for (Map.Entry<String, String> set : GamerulesClient.GAMERULE_DESCRIPTIONS.entrySet()) {
-            String name = set.getKey();
-            String desc = set.getValue();
-
-            plr.displayChatMessage(name + ": " + desc);
-        }
-    }
 }

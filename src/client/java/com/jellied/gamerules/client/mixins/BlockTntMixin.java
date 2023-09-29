@@ -1,8 +1,11 @@
 package com.jellied.gamerules.client.mixins;
 
 import com.jellied.gamerules.GamerulesClient;
+import net.minecraft.src.game.block.Block;
 import net.minecraft.src.game.block.BlockTNT;
 import net.minecraft.src.game.entity.Entity;
+import net.minecraft.src.game.entity.other.EntityItem;
+import net.minecraft.src.game.item.ItemStack;
 import net.minecraft.src.game.level.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -21,12 +24,15 @@ public class BlockTntMixin {
     }
 
     public boolean onTntPrimed(World world, Entity entity) {
+        boolean returnVal = world.entityJoinedWorld(entity);
+
         if (GamerulesClient.getGamerule("tntExplodes") == 1) {
-            return world.entityJoinedWorld(entity);
+            EntityItem itemDropped = new EntityItem(world, entity.posX, entity.posY, entity.posZ, new ItemStack(Block.tnt));
+            world.entityJoinedWorld(itemDropped);
+
+            entity.setEntityDead();
         }
 
-        entity.setEntityDead();
-
-        return false;
+        return returnVal;
     }
 }

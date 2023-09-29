@@ -67,4 +67,17 @@ public class WorldMixin {
 
         block.updateTick(world, x, y, z, random);
     }
+
+    @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/level/World;isAllPlayersFullyAsleep()Z"))
+    public boolean checkPlayersAsleep(World world) {
+        float totalPlayers = world.playerEntities.size();
+        float playersAsleep = 0;
+        for(int i = 0; i < world.playerEntities.size() - 1; i++) {
+            if (world.playerEntities.get(i).isPlayerFullyAsleep()) {
+                playersAsleep++;
+            }
+        }
+
+        return ((playersAsleep / totalPlayers) * 100) >= GamerulesServer.getGamerule("playersSleepingPercentage");
+    }
 }

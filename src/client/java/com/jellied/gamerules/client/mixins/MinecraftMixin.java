@@ -18,16 +18,10 @@ import java.io.File;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
-    Minecraft minecraft = Minecraft.getInstance();
-
     @Shadow public EntityPlayerSP thePlayer;
-    @Shadow public PlayerController playerController;
 
     @Shadow public World theWorld;
 
-    @Shadow private static File minecraftDir;
-
-    @Shadow private long systemTime;
 
     @Redirect(method = "respawn", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/client/player/PlayerController;createPlayer(Lnet/minecraft/src/game/level/World;)Lnet/minecraft/src/game/entity/player/EntityPlayer;"))
     public EntityPlayer createPlayer(PlayerController instance, World world) {
@@ -65,7 +59,7 @@ public class MinecraftMixin {
     public void onWorldChanged(CallbackInfo ci) {
         World world = this.theWorld;
 
-        System.out.println("World changed to: " + world);
+        // System.out.println("World changed to: " + world);
 
         if (world == null) {
             return;

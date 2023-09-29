@@ -14,7 +14,5 @@ public class EntityPlayerMixin {
         if (GamerulesServer.getGamerule("keepInventory") != 1) {
             instance.dropAllItems();
         }
-
-        return;
     }
 }

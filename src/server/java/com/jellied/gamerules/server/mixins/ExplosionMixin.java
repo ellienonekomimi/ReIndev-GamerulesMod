@@ -3,6 +3,7 @@ package com.jellied.gamerules.server.mixins;
 import com.jellied.gamerules.GamerulesServer;
 import net.minecraft.src.game.block.Block;
 import net.minecraft.src.game.entity.Entity;
+import net.minecraft.src.game.entity.EntityMob;
 import net.minecraft.src.game.level.Explosion;
 import net.minecraft.src.game.level.chunk.ChunkPosition;
 import org.spongepowered.asm.mixin.Mixin;
@@ -20,7 +21,7 @@ public class ExplosionMixin {
 
     @Redirect(method = "doExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/block/Block;getExplosionResistance(Lnet/minecraft/src/game/entity/Entity;)F"))
     public float onExplosionA(Block block, Entity entity) {
-        if (this.exploder == null || GamerulesServer.getGamerule("mobGriefing") == 1) {
+        if (this.exploder == null || !(this.exploder instanceof EntityMob) ||  GamerulesServer.getGamerule("mobGriefing") == 1) {
             return block.getExplosionResistance(this.exploder);
         }
 

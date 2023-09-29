@@ -19,11 +19,12 @@ public class GamerulesServer extends GamerulesMod implements ServerMod {
     public static NBTTagCompound worldGamerules;
     public static byte[] gamerulesPacket;
 
-    public static String[] gameruleIds;
-
     public final static Map<String, String> GAMERULE_DESCRIPTIONS = new HashMap<>();
     public final static Map<String, Integer> GAMERULE_DEFAULTS = new HashMap<>();
+    public final static Map<String, String> GAMERULE_SYNTAX = new HashMap<>();
+    public static String[] GAMERULE_IDS = new String[32];
 
+    // Initialization
     public void onInit() {
         initializeGamerules();
         gamerulesModContainer = this.getModContainer();
@@ -32,9 +33,16 @@ public class GamerulesServer extends GamerulesMod implements ServerMod {
         CommandCompat.registerCommand(new GameruleChatCommand());
     }
 
-    public void onNetworkPlayerJoined(NetworkPlayer netPlr) {
-        EntityPlayerMP plr = ServerMod.toEntityPlayerMP(netPlr);
-        plr.sendNetworkData(gamerulesModContainer, gamerulesPacket);
+    public void initializeGamerules() {
+        int i = 0;
+        for(EnumGameruleData gamerule : EnumGameruleData.values()) {
+            GAMERULE_DEFAULTS.put(gamerule.getId(), gamerule.getDefaultValue());
+            GAMERULE_DESCRIPTIONS.put(gamerule.getId(), gamerule.getDescription());
+            GAMERULE_SYNTAX.put(gamerule.getId(), gamerule.getDescription());
+            GAMERULE_IDS[i] = gamerule.getId();
+
+            i++;
+        }
     }
 
     public static void onWorldInit(World world) {
@@ -54,54 +62,30 @@ public class GamerulesServer extends GamerulesMod implements ServerMod {
     }
 
 
-
-    public void initializeGamerules() {
-        GAMERULE_DEFAULTS.put("keepInventory", 0);
-        GAMERULE_DESCRIPTIONS.put("keepInventory", "If true, players will not drop their inventory on death.");
-
-        GAMERULE_DEFAULTS.put("doDaylightCycle", 1);
-        GAMERULE_DESCRIPTIONS.put("doDaylightCycle", "If false, the current time will be frozen until set to true.");
-
-        GAMERULE_DEFAULTS.put("mobGriefing", 1);
-        GAMERULE_DESCRIPTIONS.put("mobGriefing", "If true, mobs (i.e. creepers) can grief the world.");
-
-        GAMERULE_DEFAULTS.put("tntExplodes", 1);
-        GAMERULE_DESCRIPTIONS.put("tntExplodes", "If true, tnt will prime when broken/activated.");
-
-        GAMERULE_DEFAULTS.put("doNightmares", 1);
-        GAMERULE_DESCRIPTIONS.put("doNightmares", "If true, mobs can interrupt sleeping.");
-
-        GAMERULE_DEFAULTS.put("allowSurvivalSprinting", 0);
-        GAMERULE_DESCRIPTIONS.put("allowSurvivalSprinting", "If true, players can sprint in survival.");
-
-        GAMERULE_DEFAULTS.put("doFireTick", 1);
-        GAMERULE_DESCRIPTIONS.put("doFireTick", "If true, fire will be able to spread to nearby flammable blocks.");
-
-        gameruleIds = new String[] {
-                "keepInventory",
-                "doDaylightCycle",
-                "mobGriefing",
-                "tntExplodes",
-                "doNightmares",
-                "allowSurvivalSprinting",
-                "doFireTick"
-        };
+    // Server networking
+    public void onNetworkPlayerJoined(NetworkPlayer netPlr) {
+        EntityPlayerMP plr = ServerMod.toEntityPlayerMP(netPlr);
+        plr.sendNetworkData(gamerulesModContainer, gamerulesPacket);
     }
 
     public static void buildGamerulesPacket() {
-        gamerulesPacket = new byte[gameruleIds.length * 2 + 1];
-        gamerulesPacket[0] = 0;
+        gamerulesPacket = new byte[GAMERULE_IDS.length * 2 + 1];
+        gamerulesPacket[0] = 0; // Packet id
 
         int gamerulesPacketIndex = 1;
-        for (int i = 0; i < gameruleIds.length - 1; i++) {
+        for (int i = 0; i < GAMERULE_IDS.length - 1; i++) {
             gamerulesPacket[gamerulesPacketIndex] = (byte) i; // Gamerule id
-            gamerulesPacket[gamerulesPacketIndex + 1] = (byte) worldGamerules.getInteger(gameruleIds[i]); // Gamerule value
+            gamerulesPacket[gamerulesPacketIndex + 1] = (byte) worldGamerules.getInteger(GAMERULE_IDS[i]); // Gamerule value
 
             gamerulesPacketIndex += 2;
         }
     }
 
     public static Integer getGamerule(String gameruleName) {
+        if (!worldGamerules.hasKey(gameruleName)) {
+            return null;
+        }
+
         return worldGamerules.getInteger(gameruleName);
     }
 

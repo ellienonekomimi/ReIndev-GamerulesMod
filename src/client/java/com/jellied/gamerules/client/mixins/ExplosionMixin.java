@@ -4,6 +4,7 @@ import com.jellied.gamerules.GamerulesClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.game.block.Block;
 import net.minecraft.src.game.entity.Entity;
+import net.minecraft.src.game.entity.EntityMob;
 import net.minecraft.src.game.level.Explosion;
 import net.minecraft.src.game.level.World;
 import net.minecraft.src.game.level.chunk.ChunkPosition;
@@ -26,7 +27,7 @@ public class ExplosionMixin {
 
     @Redirect(method = "doExplosionA", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/block/Block;getExplosionResistance(Lnet/minecraft/src/game/entity/Entity;)F"))
     public float onExplosionA(Block block, Entity entity) {
-        if (this.exploder == null || GamerulesClient.getGamerule("mobGriefing") == 1) {
+        if (this.exploder == null || !(this.exploder instanceof EntityMob) || GamerulesClient.getGamerule("mobGriefing") == 1) {
             return block.getExplosionResistance(this.exploder);
         }
 
