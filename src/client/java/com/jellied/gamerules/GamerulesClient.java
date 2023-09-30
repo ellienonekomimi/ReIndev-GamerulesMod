@@ -16,13 +16,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GamerulesClient extends GamerulesMod implements ClientMod {
-    public static NBTTagCompound worldGamerules;
-
+    // Field
     public final static Map<String, String> GAMERULE_DESCRIPTIONS = new HashMap<>();
+    public final static Map<String, String> GAMERULE_CASE_INSENSITIVE_MAP = new HashMap<>();
     public final static Map<String, Integer> GAMERULE_DEFAULTS = new HashMap<>();
     public final static Map<String, String> GAMERULE_SYNTAX = new HashMap<>();
     public static String[] GAMERULE_IDS = new String[32];
 
+    public static NBTTagCompound worldGamerules;
+
+
+
+    // Initialization
     public void onInit() {
         initializeGamerules();
 
@@ -36,14 +41,20 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
             String gameruleName = gamerule.getName();
 
             GAMERULE_DEFAULTS.put(gameruleName, gamerule.getDefaultValue());
+            GAMERULE_CASE_INSENSITIVE_MAP.put(gameruleName.toLowerCase(), gameruleName);
             GAMERULE_DESCRIPTIONS.put(gameruleName, gamerule.getDescription());
             GAMERULE_SYNTAX.put(gameruleName, gamerule.getSyntaxHelp());
             GAMERULE_IDS[gamerule.getId()] = gameruleName;
         }
     }
 
+
+
+    // get & set
     public static Integer getGamerule(String gameruleName) {
-        if (worldGamerules == null || !worldGamerules.hasKey(gameruleName)) {
+        gameruleName = GAMERULE_CASE_INSENSITIVE_MAP.get((gameruleName.toLowerCase()));
+
+        if (worldGamerules == null | gameruleName == null | !worldGamerules.hasKey(gameruleName)) {
             return GAMERULE_DEFAULTS.get(gameruleName);
         }
 

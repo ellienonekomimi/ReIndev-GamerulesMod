@@ -32,6 +32,6 @@ public class ExplosionMixin {
         }
 
         //If you're dealing with a super creeper with a larger blast strength than this, you're probably fucked anyway.
-        return 999999;
+        return 3600000;
     }
 }

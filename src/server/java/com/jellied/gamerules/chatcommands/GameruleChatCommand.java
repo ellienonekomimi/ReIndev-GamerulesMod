@@ -31,7 +31,7 @@ public class GameruleChatCommand extends CommandCompat {
                 return;
             }
 
-            String gameruleName = args[1];
+            String gameruleName = GamerulesServer.GAMERULE_CASE_INSENSITIVE_MAP.get((args[1].toLowerCase()));
 
             String desc = GamerulesServer.GAMERULE_DESCRIPTIONS.get(gameruleName);
             String syntax = GamerulesServer.GAMERULE_SYNTAX.get(gameruleName);
@@ -43,7 +43,8 @@ public class GameruleChatCommand extends CommandCompat {
         }
 
         // args[0] is "/gamerule"
-        String gameruleName = args[1];
+        String typedGameruleName = args[1];
+        String gameruleName = GamerulesServer.GAMERULE_CASE_INSENSITIVE_MAP.get((typedGameruleName.toLowerCase()));
         Integer gameruleValue;
 
         try {
@@ -67,6 +68,6 @@ public class GameruleChatCommand extends CommandCompat {
 
         // fuck you kiva x3
         //user.displayChatMessage(ChatColors.GREEN + "<COMMAND FEEDBACK> Gamerule '" + gameruleName + "' set to " + ChatColors.AQUA + gameruleValue);
-        user.displayChatMessage(ChatColors.GREEN + "Gamerule '" + gameruleName + "' set to " + ChatColors.AQUA + gameruleValue);
+        user.displayChatMessage(ChatColors.GREEN + "Gamerule '" + typedGameruleName + "' set to " + ChatColors.AQUA + gameruleValue);
     }
 }
