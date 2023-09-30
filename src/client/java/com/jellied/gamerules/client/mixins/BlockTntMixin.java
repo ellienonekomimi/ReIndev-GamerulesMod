@@ -26,7 +26,7 @@ public class BlockTntMixin {
     public boolean onTntPrimed(World world, Entity entity) {
         boolean returnVal = world.entityJoinedWorld(entity);
 
-        if (GamerulesClient.getGamerule("tntExplodes") == 1) {
+        if (GamerulesClient.getGamerule("tntExplodes") != 1) {
             EntityItem itemDropped = new EntityItem(world, entity.posX, entity.posY, entity.posZ, new ItemStack(Block.tnt));
             world.entityJoinedWorld(itemDropped);
 

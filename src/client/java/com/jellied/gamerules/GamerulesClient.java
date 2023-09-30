@@ -32,20 +32,19 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
     }
 
     public void initializeGamerules() {
-        int i = 0;
         for(EnumGameruleDataClient gamerule : EnumGameruleDataClient.values()) {
-            GAMERULE_DEFAULTS.put(gamerule.getId(), gamerule.getDefaultValue());
-            GAMERULE_DESCRIPTIONS.put(gamerule.getId(), gamerule.getDescription());
-            GAMERULE_SYNTAX.put(gamerule.getId(), gamerule.getDescription());
-            GAMERULE_IDS[i] = gamerule.getId();
+            String gameruleName = gamerule.getName();
 
-            i++;
+            GAMERULE_DEFAULTS.put(gameruleName, gamerule.getDefaultValue());
+            GAMERULE_DESCRIPTIONS.put(gameruleName, gamerule.getDescription());
+            GAMERULE_SYNTAX.put(gameruleName, gamerule.getSyntaxHelp());
+            GAMERULE_IDS[gamerule.getId()] = gameruleName;
         }
     }
 
     public static Integer getGamerule(String gameruleName) {
         if (worldGamerules == null || !worldGamerules.hasKey(gameruleName)) {
-            return null;
+            return GAMERULE_DEFAULTS.get(gameruleName);
         }
 
         return worldGamerules.getInteger(gameruleName);

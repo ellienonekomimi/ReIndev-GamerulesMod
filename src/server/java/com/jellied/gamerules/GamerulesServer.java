@@ -34,14 +34,13 @@ public class GamerulesServer extends GamerulesMod implements ServerMod {
     }
 
     public void initializeGamerules() {
-        int i = 0;
         for(EnumGameruleData gamerule : EnumGameruleData.values()) {
-            GAMERULE_DEFAULTS.put(gamerule.getId(), gamerule.getDefaultValue());
-            GAMERULE_DESCRIPTIONS.put(gamerule.getId(), gamerule.getDescription());
-            GAMERULE_SYNTAX.put(gamerule.getId(), gamerule.getDescription());
-            GAMERULE_IDS[i] = gamerule.getId();
+            String gameruleName = gamerule.getName();
 
-            i++;
+            GAMERULE_DEFAULTS.put(gameruleName, gamerule.getDefaultValue());
+            GAMERULE_DESCRIPTIONS.put(gameruleName, gamerule.getDescription());
+            GAMERULE_SYNTAX.put(gameruleName, gamerule.getSyntaxHelp());
+            GAMERULE_IDS[gamerule.getId()] = gameruleName;
         }
     }
 
@@ -61,8 +60,28 @@ public class GamerulesServer extends GamerulesMod implements ServerMod {
         buildGamerulesPacket();
     }
 
+    // get & set
+    public static Integer getGamerule(String gameruleName) {
+        if (!worldGamerules.hasKey(gameruleName)) {
+            return GAMERULE_DEFAULTS.get(gameruleName);
+        }
 
-    // Server networking
+        return worldGamerules.getInteger(gameruleName);
+    }
+
+    public static void setGamerule(String gameruleName, Integer gameruleValue) {
+        worldGamerules.setInteger(gameruleName, gameruleValue);
+        buildGamerulesPacket();
+
+        for (NetworkPlayer plr : ServerMod.getOnlineNetworkPlayers()) {
+            // replication
+            plr.sendNetworkData(gamerulesModContainer, gamerulesPacket);
+        }
+    }
+
+
+
+    // networking 🤮🤮
     public void onNetworkPlayerJoined(NetworkPlayer netPlr) {
         EntityPlayerMP plr = ServerMod.toEntityPlayerMP(netPlr);
         plr.sendNetworkData(gamerulesModContainer, gamerulesPacket);
@@ -74,27 +93,19 @@ public class GamerulesServer extends GamerulesMod implements ServerMod {
 
         int gamerulesPacketIndex = 1;
         for (int i = 0; i < GAMERULE_IDS.length - 1; i++) {
+            // maybe one of these days i write a serializer for this kind of thing
+            // then i charge money for it
+            // a monthly subscription service
+            // you pay either $12 a month OR $100 annually!
+            // or maybe like
+            // $500 once and u never have to pay for it again
+            // being a software engineer is so lucrative
+            // anyways
+
             gamerulesPacket[gamerulesPacketIndex] = (byte) i; // Gamerule id
             gamerulesPacket[gamerulesPacketIndex + 1] = (byte) worldGamerules.getInteger(GAMERULE_IDS[i]); // Gamerule value
 
             gamerulesPacketIndex += 2;
-        }
-    }
-
-    public static Integer getGamerule(String gameruleName) {
-        if (!worldGamerules.hasKey(gameruleName)) {
-            return null;
-        }
-
-        return worldGamerules.getInteger(gameruleName);
-    }
-
-    public static void setGamerule(String gameruleName, Integer gameruleValue) {
-        worldGamerules.setInteger(gameruleName, gameruleValue);
-        buildGamerulesPacket();
-
-        for (NetworkPlayer plr : ServerMod.getOnlineNetworkPlayers()) {
-            plr.sendNetworkData(gamerulesModContainer, gamerulesPacket);
         }
     }
 }

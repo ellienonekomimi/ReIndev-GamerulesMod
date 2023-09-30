@@ -30,6 +30,8 @@ public class EntityPlayerSPMixin {
     @Inject(method = "onLivingUpdate", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/entity/player/EntityPlayer;onLivingUpdate()V"))
     public void onUpdate(CallbackInfo ci) {
         EntityPlayer plr = (EntityPlayer) (Object) this; // evil floating point bit hack
+        // i either cast 'this' to plr or i make this mixin extend the EntityPlayer class
+        // and be forced to implement a shit ton of methods i'm not even gonna fuckin use
 
         if (plr.capabilities.allowFlying || GamerulesClient.getGamerule("allowSurvivalSprinting") != 1) {
             return;
