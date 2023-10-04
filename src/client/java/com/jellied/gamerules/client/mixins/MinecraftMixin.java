@@ -1,12 +1,14 @@
 package com.jellied.gamerules.client.mixins;
 
 import com.jellied.gamerules.GamerulesClient;
+import com.jellied.gamerules.WorldInfoAccessorClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.client.player.EntityPlayerSP;
 import net.minecraft.src.client.player.PlayerController;
 import net.minecraft.src.game.entity.player.EntityPlayer;
 import net.minecraft.src.game.entity.player.InventoryPlayer;
 import net.minecraft.src.game.level.World;
+import net.minecraft.src.game.level.WorldProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -66,5 +68,16 @@ public class MinecraftMixin {
         }
 
         GamerulesClient.onWorldChanged(world);
+    }
+
+    //@Redirect(method = "usePortal", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/level/World;<init>(Lnet/minecraft/src/game/level/World;Lnet/minecraft/src/game/level/WorldProvider;)V"))
+    public World onWorldCreated(World newWorld, World currentWorld, WorldProvider worldProvider) {
+        if (currentWorld.multiplayerWorld | GamerulesClient.worldGamerules == null) {
+            return newWorld;
+        }
+
+        ((WorldInfoAccessorClient) newWorld.worldInfo).setGamerules(GamerulesClient.worldGamerules);
+
+        return newWorld;
     }
 }

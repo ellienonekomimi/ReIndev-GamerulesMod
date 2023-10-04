@@ -54,7 +54,11 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
     public static Integer getGamerule(String gameruleName) {
         gameruleName = GAMERULE_CASE_INSENSITIVE_MAP.get((gameruleName.toLowerCase()));
 
-        if (worldGamerules == null | gameruleName == null | !worldGamerules.hasKey(gameruleName)) {
+        if (worldGamerules == null | gameruleName == null) {
+            return GAMERULE_DEFAULTS.get(gameruleName);
+        }
+
+        if (!worldGamerules.hasKey(gameruleName)) {
             return GAMERULE_DEFAULTS.get(gameruleName);
         }
 
@@ -73,11 +77,11 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
 
     // For singleplayer
     public static void onWorldChanged(World world) {
-        worldGamerules = ((WorldInfoAccessorClient) world.worldInfo).getGamerules();
-
         if (world.multiplayerWorld) {
             return;
         }
+
+        worldGamerules = ((WorldInfoAccessorClient) world.worldInfo).getGamerules();
 
         // Set defaults
         for (Map.Entry<String, Integer> set : GAMERULE_DEFAULTS.entrySet()) {

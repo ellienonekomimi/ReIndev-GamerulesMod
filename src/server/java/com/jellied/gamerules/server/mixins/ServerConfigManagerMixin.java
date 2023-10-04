@@ -1,6 +1,7 @@
 package com.jellied.gamerules.server.mixins;
 
 
+import com.fox2code.foxloader.loader.ServerMod;
 import com.jellied.gamerules.GamerulesServer;
 import net.minecraft.src.game.entity.Entity;
 import net.minecraft.src.game.entity.player.EntityPlayerMP;
@@ -25,6 +26,7 @@ public class ServerConfigManagerMixin {
     @Redirect(method = "recreatePlayerEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/level/WorldServer;entityJoinedWorld(Lnet/minecraft/src/game/entity/Entity;)Z"))
     public boolean onAddingToWorld(WorldServer world, Entity entity) {
         EntityPlayerMP plr = (EntityPlayerMP) entity;
+        GamerulesServer.sendGamerulesPacket(ServerMod.toNetworkPlayer(plr));
 
         if (GamerulesServer.getGamerule("keepInventory") != 1) {
             return world.entityJoinedWorld(entity);

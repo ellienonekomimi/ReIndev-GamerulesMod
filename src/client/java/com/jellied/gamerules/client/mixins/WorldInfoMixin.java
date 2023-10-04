@@ -13,7 +13,7 @@ public abstract class WorldInfoMixin implements WorldInfoAccessorClient {
     private NBTTagCompound gamerulesTag;
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    public void onWorldInfoConstructed(NBTTagCompound tag, CallbackInfo ci) {
+    public void onWorldInfoConstructedWithTag(NBTTagCompound tag, CallbackInfo ci) {
         // System.out.println("New world info!");
 
         if (tag.hasKey("jelliedgamerules")) {
@@ -23,6 +23,16 @@ public abstract class WorldInfoMixin implements WorldInfoAccessorClient {
             gamerulesTag = new NBTTagCompound();
             tag.setCompoundTag("jelliedgamerules", gamerulesTag);
         }
+    }
+
+    @Inject(method = "<init>(Lnet/minecraft/src/game/level/WorldInfo;)V", at = @At("TAIL"))
+    public void onWorldInfoConstructedWithWorldInfo(WorldInfo worldInfo, CallbackInfo ci) {
+        gamerulesTag = ((WorldInfoAccessorClient) worldInfo).getGamerules();
+        if (gamerulesTag == null) {
+            gamerulesTag = new NBTTagCompound();
+        }
+
+        this.setGamerules(gamerulesTag);
     }
 
     @Inject(method = "updateTagCompound", at = @At("TAIL"))

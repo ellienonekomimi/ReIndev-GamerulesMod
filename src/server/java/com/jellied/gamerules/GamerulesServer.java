@@ -80,16 +80,20 @@ public class GamerulesServer extends GamerulesMod implements ServerMod {
 
         for (NetworkPlayer plr : ServerMod.getOnlineNetworkPlayers()) {
             // replication
-            plr.sendNetworkData(gamerulesModContainer, gamerulesPacket);
+            sendGamerulesPacket(plr);
         }
     }
 
 
 
     // networking 🤮🤮
+    public static void sendGamerulesPacket(NetworkPlayer targetPlr) {
+        targetPlr.sendNetworkData(gamerulesModContainer, gamerulesPacket);
+    }
+
     public void onNetworkPlayerJoined(NetworkPlayer netPlr) {
         EntityPlayerMP plr = ServerMod.toEntityPlayerMP(netPlr);
-        plr.sendNetworkData(gamerulesModContainer, gamerulesPacket);
+        sendGamerulesPacket(plr);
     }
 
     public static void buildGamerulesPacket() {
