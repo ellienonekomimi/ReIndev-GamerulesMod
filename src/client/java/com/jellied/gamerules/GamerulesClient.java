@@ -30,10 +30,16 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
     // Initialization
     public void onInit() {
         initializeGamerules();
+        FastChat.init();
 
         // Chat commands
         CommandCompat.registerCommand(new GameruleChatCommandClient());
         CommandCompat.registerClientCommand(new GameruleHelpChatCommandClient());
+    }
+
+    public void onTick() {
+        FastChat.handleKeybinds();
+        FastChat.drawAutocompleteSuggestions();
     }
 
     public void initializeGamerules() {
@@ -71,6 +77,38 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
         }
 
         worldGamerules.setInteger(gameruleName, gameruleValue);
+    }
+
+    public static String autocompleteGamerule(String textInput) {
+        for (int i = 0; i < GAMERULE_IDS.length - 1; i++) {
+            String gamerule = GAMERULE_IDS[i];
+            if (gamerule != null && gamerule.toLowerCase().startsWith(textInput.toLowerCase())) {
+                return gamerule;
+            }
+            else if (gamerule == null) {
+                break;
+            }
+        }
+
+        return textInput;
+    }
+
+    public static String[] getGamerulesThatBeginWith(String with) {
+        String[] gamerules = new String[GAMERULE_IDS.length];
+        int totalGamerules = 0;
+
+        for(int i = 0; i < GAMERULE_IDS.length - 1; i++) {
+            String gamerule = GAMERULE_IDS[i];
+            if (gamerule != null && gamerule.toLowerCase().startsWith(with.toLowerCase())) {
+                gamerules[totalGamerules] = gamerule;
+                totalGamerules++;
+            }
+            else if (gamerule == null) {
+                break;
+            }
+        }
+
+        return gamerules;
     }
 
 

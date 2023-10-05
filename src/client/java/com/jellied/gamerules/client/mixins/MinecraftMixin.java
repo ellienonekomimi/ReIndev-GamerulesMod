@@ -1,5 +1,6 @@
 package com.jellied.gamerules.client.mixins;
 
+import com.jellied.gamerules.FastChat;
 import com.jellied.gamerules.GamerulesClient;
 import com.jellied.gamerules.WorldInfoAccessorClient;
 import net.minecraft.client.Minecraft;
@@ -68,16 +69,5 @@ public class MinecraftMixin {
         }
 
         GamerulesClient.onWorldChanged(world);
-    }
-
-    //@Redirect(method = "usePortal", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/level/World;<init>(Lnet/minecraft/src/game/level/World;Lnet/minecraft/src/game/level/WorldProvider;)V"))
-    public World onWorldCreated(World newWorld, World currentWorld, WorldProvider worldProvider) {
-        if (currentWorld.multiplayerWorld | GamerulesClient.worldGamerules == null) {
-            return newWorld;
-        }
-
-        ((WorldInfoAccessorClient) newWorld.worldInfo).setGamerules(GamerulesClient.worldGamerules);
-
-        return newWorld;
     }
 }
