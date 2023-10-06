@@ -38,8 +38,13 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
     }
 
     public void onTick() {
+        // im gonna kill myself
+        // the reason this shit was flickering was because
+        // i was calling this twice
+        // once here, and once in CommandHelperGuiMixin
+        // FastChat.drawAutocompleteSuggestions();
+
         FastChat.handleKeybinds();
-        FastChat.drawAutocompleteSuggestions();
     }
 
     public void initializeGamerules() {

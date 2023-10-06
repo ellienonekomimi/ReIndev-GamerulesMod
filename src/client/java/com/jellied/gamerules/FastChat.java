@@ -22,6 +22,8 @@ public class FastChat {
     private static int currentTabCycle = 0;
     private static String currentTabStringListeningTo = null;
 
+    static final int BLACK = new Color(0, 0, 0, (int) (255 * 0.75)).getRGB();
+
     public static void init() {
         keyStates.put(Keyboard.KEY_TAB, true);
         keyStates.put(Keyboard.KEY_UP, true);
@@ -51,8 +53,22 @@ public class FastChat {
 
         String[] suggestions = GamerulesClient.getGamerulesThatBeginWith(typedCommand);
 
-        int drawX = minecraft.fontRenderer.getStringWidth("> /gamerule ") + 4;
-        int drawY = res.getScaledHeight() - 26;
+        int drawX = minecraft.fontRenderer.getStringWidth("> /gamerule ");
+        int drawY = res.getScaledHeight() - 22 - 4 - 1; // One pixel above the chat bar
+        int largestCommandWidth = 0;
+        int totalCommands = 0;
+
+        for (int i = suggestions.length - 1; i >= 0; i--) {
+            String suggestion = suggestions[i];
+            if (suggestion == null) {
+                continue;
+            }
+
+            totalCommands++;
+            largestCommandWidth = Math.max(largestCommandWidth, minecraft.fontRenderer.getStringWidth(suggestion));
+        }
+
+        Gui.drawRect(drawX, drawY + 12, drawX + largestCommandWidth + 6, drawY - (12 * (totalCommands - 1)) - 4, BLACK);
 
         for (int i = suggestions.length - 1; i >= 0; i--) {
             String suggestion = suggestions[i];
@@ -61,9 +77,9 @@ public class FastChat {
             }
 
             boolean isCurrentCycle = i == currentTabCycle;
+            int textColor = isCurrentCycle ? Color.YELLOW.getRGB() : Color.WHITE.getRGB();
+            minecraft.fontRenderer.drawStringWithShadow(suggestion, drawX, drawY, textColor);
 
-            Gui.drawRect(drawX, drawY, drawX + minecraft.fontRenderer.getStringWidth(suggestion), drawY + 12, -2147483648);
-            minecraft.fontRenderer.drawStringWithShadow(suggestion, drawX, drawY, isCurrentCycle ? Color.ORANGE.getRGB() : Color.WHITE.getRGB());
             drawY -= 12;
         }
 
