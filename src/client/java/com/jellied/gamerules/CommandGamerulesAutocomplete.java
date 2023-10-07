@@ -19,25 +19,7 @@ public class CommandGamerulesAutocomplete {
         }
     }
 
-    // lol
-    public int getCursorArgIndex(String command, int cursorPos) {
-        int argIndex = 0;
-
-        for (int i = 0; i <= command.length() - 1; i++) {
-            if (i == cursorPos) {
-                break;
-            }
-
-            if (command.charAt(i) == ' ') {
-                argIndex++;
-            }
-        }
-
-        return argIndex;
-    }
-
-    public List<String> getCommandSuggestions(GuiChat gui) {
-        int commandArgIndex = getCursorArgIndex(gui.chat.text, gui.chat.cursorPosition);
+    public List<String> getCommandSuggestions(GuiChat gui, int commandArgIndex) {
         if (commandArgIndex != 1) {
             return blankList;
         }
