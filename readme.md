@@ -1,5 +1,7 @@
 This is a FoxLoader mod for ReIndev v2.8.1 that adds gamerules to the game.
 
+This mod has autocomplete support for my [autocomplete mod!](https://github.com/jelliedbanana/ReIndev-CommandAutocomplete)
+
 **If a server is using this mod, players will be required to have the mod installed as well for certain features to function properly.**
 
 # Commands Added
