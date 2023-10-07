@@ -1,23 +1,18 @@
 package com.jellied.gamerules.client.mixins;
 
-import com.jellied.gamerules.FastChat;
 import com.jellied.gamerules.GamerulesClient;
-import com.jellied.gamerules.WorldInfoAccessorClient;
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.client.player.EntityPlayerSP;
 import net.minecraft.src.client.player.PlayerController;
 import net.minecraft.src.game.entity.player.EntityPlayer;
 import net.minecraft.src.game.entity.player.InventoryPlayer;
 import net.minecraft.src.game.level.World;
-import net.minecraft.src.game.level.WorldProvider;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.io.File;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {

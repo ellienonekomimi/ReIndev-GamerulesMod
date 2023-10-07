@@ -1,16 +1,18 @@
 package com.jellied.gamerules;
 
 import com.fox2code.foxloader.loader.ClientMod;
+import com.fox2code.foxloader.loader.ModContainer;
+import com.fox2code.foxloader.loader.ModLoader;
 import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.registry.CommandCompat;
 
 import com.jellied.gamerules.chatcommands.GameruleChatCommandClient;
 
 import com.jellied.gamerules.chatcommands.GameruleHelpChatCommandClient;
-import net.minecraft.src.client.packets.NetworkManager;
 import net.minecraft.src.game.level.World;
 import net.minecraft.src.game.nbt.NBTTagCompound;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,21 +32,33 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
     // Initialization
     public void onInit() {
         initializeGamerules();
-        FastChat.init();
+        initAutocomplete();
 
         // Chat commands
         CommandCompat.registerCommand(new GameruleChatCommandClient());
         CommandCompat.registerClientCommand(new GameruleHelpChatCommandClient());
     }
 
-    public void onTick() {
-        // im gonna kill myself
-        // the reason this shit was flickering was because
-        // i was calling this twice
-        // once here, and once in CommandHelperGuiMixin
-        // FastChat.drawAutocompleteSuggestions();
+    public void initAutocomplete() {
+        ModContainer autocompleteModContainer = ModLoader.getModContainer("jelliedautocomplete");
 
-        FastChat.handleKeybinds();
+        if (autocompleteModContainer == null) {
+            return;
+        }
+
+        Object clientMod = autocompleteModContainer.getClientMod();
+        System.out.println("Detected autocomplete mod, initializing... ");
+
+        try {
+            Method addAutocompleteMethod =  clientMod.getClass().getMethod("addAutocomplete", String.class, Object.class);
+            addAutocompleteMethod.invoke(clientMod, "/gamerule", new CommandGamerulesAutocomplete());
+
+            System.out.println("Successfully initialized gamerule autocompletion.");
+        }
+        catch (Exception e) {
+            System.out.println("Could not initialize gamerule autocompletion:");
+            e.printStackTrace();
+        }
     }
 
     public void initializeGamerules() {
@@ -83,39 +97,6 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
 
         worldGamerules.setInteger(gameruleName, gameruleValue);
     }
-
-    public static String autocompleteGamerule(String textInput) {
-        for (int i = 0; i < GAMERULE_IDS.length - 1; i++) {
-            String gamerule = GAMERULE_IDS[i];
-            if (gamerule != null && gamerule.toLowerCase().startsWith(textInput.toLowerCase())) {
-                return gamerule;
-            }
-            else if (gamerule == null) {
-                break;
-            }
-        }
-
-        return textInput;
-    }
-
-    public static String[] getGamerulesThatBeginWith(String with) {
-        String[] gamerules = new String[GAMERULE_IDS.length];
-        int totalGamerules = 0;
-
-        for(int i = 0; i < GAMERULE_IDS.length - 1; i++) {
-            String gamerule = GAMERULE_IDS[i];
-            if (gamerule != null && gamerule.toLowerCase().startsWith(with.toLowerCase())) {
-                gamerules[totalGamerules] = gamerule;
-                totalGamerules++;
-            }
-            else if (gamerule == null) {
-                break;
-            }
-        }
-
-        return gamerules;
-    }
-
 
 
     // For singleplayer
