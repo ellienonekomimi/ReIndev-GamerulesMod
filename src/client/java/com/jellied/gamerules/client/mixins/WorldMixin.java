@@ -75,7 +75,7 @@ public class WorldMixin {
 
         float totalPlayers = playerEntities.size();
         float playersAsleep = 0;
-        for(int i = 0; i < playerEntities.size() - 1; i++) {
+        for(int i = 0; i <= playerEntities.size() - 1; i++) {
             if (playerEntities.get(i).isPlayerFullyAsleep()) {
                 playersAsleep++;
             }

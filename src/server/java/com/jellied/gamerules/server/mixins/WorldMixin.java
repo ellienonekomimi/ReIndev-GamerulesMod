@@ -72,7 +72,7 @@ public class WorldMixin {
     public boolean checkPlayersAsleep(World world) {
         float totalPlayers = world.playerEntities.size();
         float playersAsleep = 0;
-        for(int i = 0; i < world.playerEntities.size() - 1; i++) {
+        for(int i = 0; i <= world.playerEntities.size() - 1; i++) {
             if (world.playerEntities.get(i).isPlayerFullyAsleep()) {
                 playersAsleep++;
             }
