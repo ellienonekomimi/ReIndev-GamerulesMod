@@ -101,7 +101,7 @@ public class GamerulesServer extends GamerulesMod implements ServerMod {
         gamerulesPacket[0] = 0; // Packet id
 
         int gamerulesPacketIndex = 1;
-        for (int i = 0; i < GAMERULE_IDS.length - 1; i++) {
+        for (int i = 0; i < GAMERULE_IDS.length; i++) {
             // maybe one of these days i write a serializer for this kind of thing
             // then i charge money for it
             // a monthly subscription service

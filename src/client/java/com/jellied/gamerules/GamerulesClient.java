@@ -5,15 +5,12 @@ import com.fox2code.foxloader.loader.ModContainer;
 import com.fox2code.foxloader.loader.ModLoader;
 import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.registry.CommandCompat;
-
 import com.jellied.gamerules.chatcommands.GameruleChatCommandClient;
-
 import com.jellied.gamerules.chatcommands.GameruleHelpChatCommandClient;
 import net.minecraft.src.game.level.World;
 import net.minecraft.src.game.nbt.NBTTagCompound;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -132,6 +129,7 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
         // 0 1   1 0   2 3
         // First integer in each pair is the gamerule's numerical id
         // Second integer is the gamerule's value
+
         for (int i = 1; i < packet.length - 1; i += 2) {
             String gameruleName = GAMERULE_IDS[packet[i]];
             Integer gameruleValue = (int) packet[i + 1];

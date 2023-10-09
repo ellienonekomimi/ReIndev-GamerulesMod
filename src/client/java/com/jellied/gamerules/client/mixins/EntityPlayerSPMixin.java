@@ -1,6 +1,5 @@
 package com.jellied.gamerules.client.mixins;
 
-import com.fox2code.foxloader.registry.CommandCompat;
 import com.jellied.gamerules.GamerulesClient;
 import net.minecraft.src.client.player.EntityPlayerSP;
 import net.minecraft.src.client.player.MovementInput;
@@ -12,8 +11,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.lang.reflect.Method;
 
 @Mixin(EntityPlayerSP.class)
 public class EntityPlayerSPMixin {

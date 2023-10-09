@@ -1,9 +1,7 @@
 package com.jellied.gamerules;
 
-import com.fox2code.foxloader.loader.ModLoader;
 import net.minecraft.src.client.gui.GuiChat;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
