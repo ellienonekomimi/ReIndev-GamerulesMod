@@ -1,17 +1,13 @@
 package com.jellied.gamerules.client.mixins;
 
 import com.jellied.gamerules.GamerulesClient;
-import net.minecraft.client.Minecraft;
 import net.minecraft.src.game.block.Block;
-import net.minecraft.src.game.block.BlockFire;
 import net.minecraft.src.game.entity.player.EntityPlayer;
 import net.minecraft.src.game.level.SpawnerAnimals;
 import net.minecraft.src.game.level.World;
 import net.minecraft.src.game.level.WorldInfo;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
@@ -73,14 +69,11 @@ public class WorldMixin {
             return false;
         }
 
-        float totalPlayers = playerEntities.size();
         float playersAsleep = 0;
-        for(int i = 0; i <= playerEntities.size() - 1; i++) {
-            if (playerEntities.get(i).isPlayerFullyAsleep()) {
-                playersAsleep++;
-            }
-        }
+        for (EntityPlayer p : playerEntities)
+            playersAsleep += p.isPlayerFullyAsleep() ? 1 : 0;
 
+        float totalPlayers = playerEntities.size();
         return ((playersAsleep / totalPlayers) * 100) >= GamerulesClient.getGamerule("playersSleepingPercentage");
     }
 }

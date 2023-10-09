@@ -3,6 +3,7 @@ package com.jellied.gamerules.server.mixins;
 import com.jellied.gamerules.GamerulesServer;
 import com.jellied.gamerules.WorldInfoAccessor;
 import net.minecraft.src.game.block.Block;
+import net.minecraft.src.game.entity.player.EntityPlayer;
 import net.minecraft.src.game.level.SpawnerAnimals;
 import net.minecraft.src.game.level.World;
 import net.minecraft.src.game.level.WorldInfo;
@@ -70,13 +71,11 @@ public class WorldMixin {
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/level/World;isAllPlayersFullyAsleep()Z"))
     public boolean checkPlayersAsleep(World world) {
-        float totalPlayers = world.playerEntities.size();
         float playersAsleep = 0;
-        for(int i = 0; i <= world.playerEntities.size() - 1; i++) {
-            if (world.playerEntities.get(i).isPlayerFullyAsleep()) {
-                playersAsleep++;
-            }
-        }
+        for (EntityPlayer p : world.playerEntities)
+            playersAsleep += p.isPlayerFullyAsleep() ? 1 : 0;
+
+        float totalPlayers = world.playerEntities.size();
 
         return ((playersAsleep / totalPlayers) * 100) >= GamerulesServer.getGamerule("playersSleepingPercentage");
     }

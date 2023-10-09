@@ -5,8 +5,6 @@ import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.registry.CommandCompat;
 import com.jellied.gamerules.GamerulesServer;
 
-import java.util.Map;
-
 public class GameruleChatCommand extends CommandCompat {
     public GameruleChatCommand() {
         super("gamerule", true);
@@ -23,14 +21,14 @@ public class GameruleChatCommand extends CommandCompat {
             user.displayChatMessage(commandSyntax());
             return;
         }
-        else if (args.length == 2) {
-            if (GamerulesServer.getGamerule(args[1]) == null) {
-                // iT'S obNOxiOuS
-                // user.displayChatMessage(ChatColors.RED + "<COMMAND FEEDBACK> Gamerule '" + args[1] + "' does not exist!");
-                user.displayChatMessage(ChatColors.RED + "Gamerule '" + args[1] + "' does not exist!");
-                return;
-            }
 
+        if (GamerulesServer.getGamerule(args[1]) == null) {
+            // iT'S obNOxiOuS
+            user.displayChatMessage(ChatColors.RED + "Gamerule '" + args[1] + "' does not exist!");
+            return;
+        }
+
+        if (args.length == 2) {
             String gameruleName = GamerulesServer.GAMERULE_CASE_INSENSITIVE_MAP.get((args[1].toLowerCase()));
 
             String desc = GamerulesServer.GAMERULE_DESCRIPTIONS.get(gameruleName);
@@ -52,22 +50,19 @@ public class GameruleChatCommand extends CommandCompat {
         }
         catch(Exception e) {
             // fuck you kiva
-            // user.displayChatMessage(ChatColors.RED + "<COMMAND FEEDBACK> '" + args[2] + "' is not an integer!");
-            user.displayChatMessage(ChatColors.RED + args[2] + "' is not an integer!");
+            user.displayChatMessage(ChatColors.RED + "'" + args[2] + "' is not an integer!");
             return;
         }
 
         if (GamerulesServer.getGamerule(gameruleName) == null) {
             // fuck you kiva x2
-            // user.displayChatMessage(ChatColors.RED + "<COMMAND FEEDBACK> '" + gameruleName + "' is not a valid gamerule!");
-            user.displayChatMessage(ChatColors.RED + gameruleName + "' is not a valid gamerule!");
+            user.displayChatMessage(ChatColors.RED + "'" + gameruleName + "' is not a valid gamerule!");
             return;
         }
 
         GamerulesServer.setGamerule(gameruleName, gameruleValue);
 
         // fuck you kiva x3
-        //user.displayChatMessage(ChatColors.GREEN + "<COMMAND FEEDBACK> Gamerule '" + gameruleName + "' set to " + ChatColors.AQUA + gameruleValue);
         user.displayChatMessage(ChatColors.GREEN + "Gamerule '" + typedGameruleName + "' set to " + ChatColors.AQUA + gameruleValue);
     }
 }
