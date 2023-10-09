@@ -14,7 +14,6 @@ public class GameruleHelpChatCommandClient extends CommandCompat {
     }
 
     public void listGamerules(NetworkPlayer plr) {
-        // fuck you kiva x4 (i forgot this one)
         plr.displayChatMessage(ChatColors.GRAY + "Gamerules:");
 
         for (Map.Entry<String, String> set : GamerulesClient.GAMERULE_DESCRIPTIONS.entrySet()) {
