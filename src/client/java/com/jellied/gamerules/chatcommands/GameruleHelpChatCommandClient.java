@@ -4,6 +4,7 @@ import com.fox2code.foxloader.network.ChatColors;
 import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.registry.CommandCompat;
 import com.jellied.gamerules.GamerulesClient;
+import net.minecraft.client.Minecraft;
 
 import java.util.Map;
 
@@ -14,6 +15,11 @@ public class GameruleHelpChatCommandClient extends CommandCompat {
     }
 
     public void listGamerules(NetworkPlayer plr) {
+        if (Minecraft.getInstance().thePlayer.worldObj.multiplayerWorld && GamerulesClient.worldGamerules == null){
+            plr.displayChatMessage(ChatColors.RED + "This server does not have GamerulesMod");
+            return;
+        }
+
         plr.displayChatMessage(ChatColors.GRAY + "Gamerules:");
 
         for (Map.Entry<String, String> set : GamerulesClient.GAMERULE_DESCRIPTIONS.entrySet()) {
