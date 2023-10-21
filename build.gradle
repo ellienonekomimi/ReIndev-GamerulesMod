@@ -12,7 +12,7 @@ buildscript {
 
 apply plugin: 'foxloader.dev'
 
-version '0.6.1'
+version '0.6.2'
 
 foxloader {
     // forceReload = true

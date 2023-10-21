@@ -19,6 +19,8 @@ import java.util.Random;
 
 @Mixin(World.class)
 public class WorldMixin {
+    long frozenWorldTime;
+
     @Shadow protected WorldInfo worldInfo;
 
     @Inject(method = "saveLevel", at = @At("HEAD"))

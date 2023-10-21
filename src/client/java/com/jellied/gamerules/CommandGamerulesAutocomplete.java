@@ -17,11 +17,24 @@ public class CommandGamerulesAutocomplete {
         }
     }
 
+    public List<String> getGamerulesThatBeginWith(String with) {
+        List<String> gamerulesThatBegin = new ArrayList<>();
+
+        for (String entry : gamerules) {
+            if (entry != null && entry.startsWith(with)) {
+                gamerulesThatBegin.add(entry);
+            }
+        }
+
+        return gamerulesThatBegin;
+    }
+
     public List<String> getCommandSuggestions(GuiChat gui, int commandArgIndex) {
         if (commandArgIndex != 1) {
             return blankList;
         }
 
-       return gamerules;
+        String typedGamerule = gui.chat.text.replaceFirst("/gamerule ", "");
+       return getGamerulesThatBeginWith(typedGamerule);
     }
 }
