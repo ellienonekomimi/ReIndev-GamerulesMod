@@ -90,6 +90,8 @@ public class WorldMixin {
             return;
         }
 
+        // If I cannot move towards my target I will move my target towards me
+
         NextTickListEntry tickEntry;
         for (Iterator<NextTickListEntry> iterator = this.scheduledTickSet.iterator(); iterator.hasNext(); tickEntry.scheduledTime -= 1) {
             tickEntry = iterator.next();
