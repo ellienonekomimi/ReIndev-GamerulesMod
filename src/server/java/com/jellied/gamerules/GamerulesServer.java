@@ -49,6 +49,10 @@ public class GamerulesServer extends GamerulesMod implements ServerMod {
 
     public static void onWorldInit(World world) {
         worldGamerules = ((WorldInfoAccessor) world.getWorldInfo()).getGamerules();
+        if (worldGamerules == null) {
+            ((WorldInfoAccessor) world.getWorldInfo())
+                    .setGamerules(worldGamerules = new NBTTagCompound());
+        }
 
         // Set defaults
         for (Map.Entry<String, Integer> set : GAMERULE_DEFAULTS.entrySet()) {
