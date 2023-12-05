@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class WorldInfoMixin implements WorldInfoAccessorClient {
     private NBTTagCompound gamerulesTag;
 
-    @Inject(method = "<init>", at = @At("TAIL"))
+    @Inject(method = "<init>*", at = @At("TAIL"))
     public void onWorldInfoConstructedWithTag(NBTTagCompound tag, CallbackInfo ci) {
         // System.out.println("New world info!");
 
@@ -37,7 +37,9 @@ public abstract class WorldInfoMixin implements WorldInfoAccessorClient {
 
     @Inject(method = "updateTagCompound", at = @At("TAIL"))
     public void onWorldInfoUpdated(NBTTagCompound newTag, NBTTagCompound plrTag, CallbackInfo ci) {
-        newTag.setCompoundTag("jelliedgamerules", gamerulesTag);
+        if (gamerulesTag != null) {
+            newTag.setCompoundTag("jelliedgamerules", gamerulesTag);
+        }
     }
 
     @Override

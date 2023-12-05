@@ -103,6 +103,10 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
         }
 
         worldGamerules = ((WorldInfoAccessorClient) world.worldInfo).getGamerules();
+        if (worldGamerules == null) {
+            ((WorldInfoAccessorClient) world.worldInfo)
+                    .setGamerules(worldGamerules = new NBTTagCompound());
+        }
 
         // Set defaults
         for (Map.Entry<String, Integer> set : GAMERULE_DEFAULTS.entrySet()) {
