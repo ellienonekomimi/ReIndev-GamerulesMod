@@ -18,4 +18,4 @@ Displays the given gamerule's description and syntax.
 Sets the given gamerule's value to a new value.
 
 # Gamerules Added
-keepInventory, doDaylightCycle, mobGriefing, tntExplodes, doNightmares, allowSurvivalSprinting, doFireTick, playersSleepingPercentage
+keepInventory, doDaylightCycle, mobGriefing, tntExplodes, doNightmares, allowSurvivalSprinting, doFireTick, playersSleepingPercentage, doLightning
