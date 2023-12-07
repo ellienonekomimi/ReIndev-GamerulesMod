@@ -3,6 +3,7 @@ package com.jellied.gamerules.server.mixins;
 import com.jellied.gamerules.GamerulesServer;
 import com.jellied.gamerules.WorldInfoAccessor;
 import net.minecraft.src.game.block.Block;
+import net.minecraft.src.game.entity.Entity;
 import net.minecraft.src.game.entity.player.EntityPlayer;
 import net.minecraft.src.game.level.SpawnerAnimals;
 import net.minecraft.src.game.level.World;
@@ -18,10 +19,12 @@ import java.util.List;
 import java.util.Random;
 
 @Mixin(World.class)
-public class WorldMixin {
+public abstract class WorldMixin {
     long frozenWorldTime;
 
     @Shadow protected WorldInfo worldInfo;
+
+    @Shadow public abstract boolean addLightningBolt(Entity entity);
 
     @Inject(method = "saveLevel", at = @At("HEAD"))
     public void beforeSave(CallbackInfo ci) {
@@ -80,5 +83,18 @@ public class WorldMixin {
         float totalPlayers = world.playerEntities.size();
 
         return ((playersAsleep / totalPlayers) * 100) >= GamerulesServer.getGamerule("playersSleepingPercentage");
+    }
+
+    @Redirect(method = "doRandomUpdateTicks", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/level/World;addLightningBolt(Lnet/minecraft/src/game/entity/Entity;)Z"))
+    public boolean onLightningAdd(World instance, Entity entity) {
+        System.out.println("Striking lightning!");
+
+        if (GamerulesServer.getGamerule("doLightning") != 1) {
+            entity.setEntityDead();
+
+            return false;
+        }
+
+        return addLightningBolt(entity);
     }
 }
