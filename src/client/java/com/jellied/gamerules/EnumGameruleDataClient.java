@@ -8,7 +8,8 @@ public enum EnumGameruleDataClient {
     DO_NIGHTMARES("doNightmares", 4, 1, "If true, players sleeping in a dark environment can spawn a mob on them.", "Accepts a value of either 0 (false) or 1 (true)"),
     ALLOW_SURVIVAL_SPRINTING("allowSurvivalSprinting", 5, 0, "If true, players can sprint in survival.", "Accepts a value of either 0 (false) or 1 (true)"),
     DO_FIRE_TICK("doFireTick", 6, 1, "If false, fire will not spread.", "Accepts a value of either 0 (false) or 1 (true)"),
-    PLAYERS_SLEEPING_PERCENTAGE("playersSleepingPercentage", 7, 100, "Dictates the percentage of players that must be asleep in order to skip to morning.", "Accepts values between 0-100 (percentage of players that must be sleeping to skip to night)");
+    PLAYERS_SLEEPING_PERCENTAGE("playersSleepingPercentage", 7, 100, "Dictates the percentage of players that must be asleep in order to skip to morning.", "Accepts values between 0-100 (percentage of players that must be sleeping to skip to night)"),
+    DO_LIGHTNING("doLightning", 8, 1, "If false, lightning will never strike during thunderstorms.", "Accepts a value of either 0 (false) or 1 (true)");
 
     private final String name;
     private final int id;

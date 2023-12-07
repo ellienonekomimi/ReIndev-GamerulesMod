@@ -2,6 +2,7 @@ package com.jellied.gamerules.client.mixins;
 
 import com.jellied.gamerules.GamerulesClient;
 import net.minecraft.src.game.block.Block;
+import net.minecraft.src.game.entity.Entity;
 import net.minecraft.src.game.entity.player.EntityPlayer;
 import net.minecraft.src.game.level.NextTickListEntry;
 import net.minecraft.src.game.level.SpawnerAnimals;
@@ -20,12 +21,14 @@ import java.util.Random;
 import java.util.Set;
 
 @Mixin(World.class)
-public class WorldMixin {
+public abstract class WorldMixin {
     @Shadow public boolean multiplayerWorld;
 
     @Shadow public List<EntityPlayer> playerEntities;
 
     @Shadow private Set<NextTickListEntry> scheduledTickSet;
+
+    @Shadow public abstract boolean addLightningBolt(Entity entity);
 
     @Redirect(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/level/WorldInfo;setWorldTime(J)V"))
     public void tick(WorldInfo worldInfo, long newWorldTime) {
@@ -96,5 +99,18 @@ public class WorldMixin {
         for (Iterator<NextTickListEntry> iterator = this.scheduledTickSet.iterator(); iterator.hasNext(); tickEntry.scheduledTime -= 1) {
             tickEntry = iterator.next();
         }
+    }
+
+    @Redirect(method = "doRandomUpdateTicks", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/level/World;addLightningBolt(Lnet/minecraft/src/game/entity/Entity;)Z"))
+    public boolean onLightningAdd(World instance, Entity entity) {
+        System.out.println("Striking lightning!");
+
+        if (GamerulesClient.getGamerule("doLightning") != 1) {
+            entity.setEntityDead();
+
+            return false;
+        }
+
+        return addLightningBolt(entity);
     }
 }
