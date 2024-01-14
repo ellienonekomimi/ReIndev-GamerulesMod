@@ -5,7 +5,7 @@ import com.fox2code.foxloader.loader.ServerMod;
 import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.registry.CommandCompat;
 
-import com.jellied.gamerules.chatcommands.GameruleChatCommand;
+import com.jellied.gamerules.chatcommands.GameruleServer;
 import net.minecraft.src.game.entity.player.EntityPlayerMP;
 import net.minecraft.src.game.level.World;
 import net.minecraft.src.game.nbt.NBTTagCompound;
@@ -32,7 +32,7 @@ public class GamerulesServer extends GamerulesMod implements ServerMod {
         gamerulesModContainer = this.getModContainer();
 
         // Chat commands
-        CommandCompat.registerCommand(new GameruleChatCommand());
+        CommandCompat.registerCommand(new GameruleServer());
     }
 
     public void initializeGamerules() {

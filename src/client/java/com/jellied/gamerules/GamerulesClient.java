@@ -5,8 +5,8 @@ import com.fox2code.foxloader.loader.ModContainer;
 import com.fox2code.foxloader.loader.ModLoader;
 import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.registry.CommandCompat;
-import com.jellied.gamerules.chatcommands.GameruleChatCommandClient;
-import com.jellied.gamerules.chatcommands.GameruleHelpChatCommandClient;
+import com.jellied.gamerules.chatcommands.Gamerule;
+import com.jellied.gamerules.chatcommands.Gamerules;
 import net.minecraft.src.game.level.World;
 import net.minecraft.src.game.nbt.NBTTagCompound;
 
@@ -32,8 +32,8 @@ public class GamerulesClient extends GamerulesMod implements ClientMod {
         initAutocomplete();
 
         // Chat commands
-        CommandCompat.registerCommand(new GameruleChatCommandClient());
-        CommandCompat.registerClientCommand(new GameruleHelpChatCommandClient());
+        CommandCompat.registerCommand(new Gamerule());
+        CommandCompat.registerClientCommand(new Gamerules());
     }
 
     public void initAutocomplete() {
