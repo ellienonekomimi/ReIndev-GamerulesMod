@@ -21,7 +21,7 @@ public class ExplosionMixin {
 
     @Redirect(method = "doExplosion", at = @At(value = "INVOKE", target = "Lnet/minecraft/src/game/block/Block;getExplosionResistance(Lnet/minecraft/src/game/entity/Entity;)F"))
     public float onExplosionA(Block block, Entity entity) {
-        if (this.exploder == null || !(this.exploder instanceof EntityMob) ||  GamerulesServer.getGamerule("mobGriefing") == 1) {
+        if (this.exploder == null || !(this.exploder instanceof EntityMob) || GamerulesServer.getGamerule("mobGriefing") == 1) {
             return block.getExplosionResistance(this.exploder);
         }
 

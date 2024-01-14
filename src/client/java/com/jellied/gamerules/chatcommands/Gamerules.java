@@ -8,9 +8,9 @@ import net.minecraft.client.Minecraft;
 
 import java.util.Map;
 
-public class GameruleHelpChatCommandClient extends CommandCompat {
+public class Gamerules extends CommandCompat {
 
-    public GameruleHelpChatCommandClient() {
+    public Gamerules() {
         super("gamerules", false);
     }
 
